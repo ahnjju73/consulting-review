@@ -3,6 +3,7 @@ import { signIn } from "./actions";
 export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const params = await searchParams;
   const error = typeof params.error === "string" ? params.error : null;
+  const created = params.created === "1";
 
   return (
     <div className="flex flex-1 items-center justify-center px-4 py-16">
@@ -15,6 +16,11 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         </div>
 
         <form action={signIn} className="card flex flex-col gap-4">
+          {created && (
+            <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700 border border-emerald-200">
+              계정이 생성되었습니다. 로그인해주세요.
+            </p>
+          )}
           {error && (
             <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700 border border-red-200">
               {error}
@@ -54,6 +60,12 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
 
         <p className="mt-6 text-center text-xs text-slate-400">
           계정이 없으신가요? 관리자에게 문의해 계정을 발급받으세요.
+        </p>
+        <p className="mt-1 text-center text-xs text-slate-300">
+          처음 설정하시나요?{" "}
+          <a href="/setup-admin" className="underline">
+            관리자 계정 만들기
+          </a>
         </p>
       </div>
     </div>

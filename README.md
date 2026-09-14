@@ -40,16 +40,17 @@ DB(Supabase 프로젝트)도 따로 두는 것을 권장합니다 — 학생 개
      생성하는 서버 액션(`app/admin/teachers/actions.ts`)에서만 사용됩니다. 브라우저에 노출되지
      않습니다.
 4. `npm install`
-5. **최초 관리자 계정 만들기** (1회만, 수동):
-   - Supabase 대시보드 → Authentication → Users → "Add user"로 관리자 이메일/비밀번호 생성.
-   - 생성된 유저의 UUID를 복사해서 SQL Editor에서 실행:
-     ```sql
-     update profiles set role = 'admin', full_name = '관리자 이름'
-     where id = '여기에-생성된-user-uuid-붙여넣기';
-     ```
-   - 트리거가 `profiles` 행을 기본 `role='teacher'`로 만들어두므로, 이 UPDATE로 admin으로
-     바꿔주는 것입니다.
-6. `npm run dev` 후 이 관리자 계정으로 로그인 → `/admin/teachers`에서 실제 선생님 계정들을
+5. **최초 관리자 계정 만들기** (1회만): 배포된 사이트(또는 `npm run dev` 후 로컬)에서
+   `/setup-admin`에 접속해서 이름/이메일/비밀번호를 입력하면 바로 관리자 계정이 만들어집니다.
+   Supabase 대시보드나 SQL을 직접 만질 필요가 없습니다.
+   - 이 화면은 **profiles 테이블이 완전히 비어있을 때만** 동작하고, 계정이 하나라도 생기면
+     자동으로 잠깁니다(그 이후엔 "이미 설정되어 있습니다" 메시지만 뜨고 더 이상 계정을 만들 수
+     없음) — 그러니 배포 직후, 아직 아무에게도 URL을 공유하기 전에 가장 먼저 해주세요.
+   - (참고) 직접 SQL로 하고 싶다면: Supabase 대시보드 → Authentication → Users → "Add user"로
+     계정을 만든 뒤, SQL Editor에서 `update profiles set role = 'admin' where id = '유저 UUID';`
+     를 실행해도 동일하게 됩니다. 트리거가 `profiles` 행을 기본 `role='teacher'`로 만들어두기
+     때문입니다. 하지만 위 `/setup-admin` 방법이 훨씬 간단합니다.
+6. 이 관리자 계정으로 `/login`에서 로그인 → `/admin/teachers`에서 실제 선생님 계정들을
    만들면 됩니다.
 
 ## 배포 (Vercel 등)
